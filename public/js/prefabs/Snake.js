@@ -16,7 +16,7 @@ SnakeGame.Snake.prototype = Object.create(Phaser.Sprite.prototype);
 SnakeGame.Snake.prototype.constructor = SnakeGame.Snake;
 
 SnakeGame.Snake.prototype.getCoordinates = function() {
-  var coordinates = [];
+  var coordinates = [{row: this.row, col: this.col}];
   this.body.forEach(function(bodyBlock) {
     coordinates.push({
       row: bodyBlock.row,
@@ -25,8 +25,26 @@ SnakeGame.Snake.prototype.getCoordinates = function() {
   });
 
   return coordinates;
-}
+};
 
 SnakeGame.Snake.prototype.getDirection = function() {
   return this.direction;
+};
+
+SnakeGame.Snake.prototype.changeDirection = function(direction) {
+  if (this.canChangeDirection(direction)) {
+    this.direction = direction;
+    this.state.board.notifyChange({
+      row: this.row,
+      col: this.col,
+      value: this.direction
+    });
+  }
+};
+
+SnakeGame.Snake.prototype.canChangeDirection = function(direction) {
+  return ((this.direction == 'n' || this.direction == 's')
+          && (direction == 'w' || direction == 'e'))
+      || ((this.direction == 'w' || this.direction == 'e')
+          && (direction == 'n' || direction == 's'))
 }

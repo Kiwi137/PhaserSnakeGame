@@ -43,3 +43,7 @@ SnakeGame.Board.prototype.addSnakeToBoard = function(snake) {
 
   this.grid[head.row][head.col] = direction;
 };
+
+SnakeGame.Board.prototype.notifyChange = function(data) {
+  this.grid[data.row][data.col] = data.value;
+};
