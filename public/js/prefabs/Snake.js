@@ -1,7 +1,7 @@
 var SnakeGame = SnakeGame || {};
 
 SnakeGame.Snake = function(state, x, y, data) {
-  Phaser.Sprite.call(this, state.game, x, y, data.asset);
+  Phaser.Sprite.call(this, state.game, x, y, data.asset, 3);
 
   this.state = state;
   this.direction = data.direction || this.state.NORTH;
@@ -32,6 +32,21 @@ SnakeGame.Snake.prototype.getDirection = function() {
 SnakeGame.Snake.prototype.changeDirection = function(direction) {
   if (this.canChangeDirection(direction)) {
     this.direction = direction;
+
+    switch (this.direction.symbol) {
+      case 'n':
+        this.frame = 3;
+        break;
+      case 's':
+        this.frame = 1;
+        break;
+      case 'e':
+        this.frame = 2;
+        break;
+      case 'w':
+        this.frame = 0;
+        break;
+    }
   }
 };
 

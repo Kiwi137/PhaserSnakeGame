@@ -40,7 +40,7 @@ SnakeGame.GameState = {
     // group for the blocks that make up the body of the snake
     var snakeBody = this.add.group();
     var i;
-    for (i = 5; i < 11; i++) {
+    for (i = 11; i < 16; i++) {
       snakeBody.add(new SnakeGame.SnakeBody(this, 16 * this.BLOCK_SIZE, i * this.BLOCK_SIZE, {
         asset: 'body',
         row: i,
@@ -49,9 +49,9 @@ SnakeGame.GameState = {
     }
 
     this.player = {
-      snake: new SnakeGame.Snake(this, 16 * this.BLOCK_SIZE, 4 * this.BLOCK_SIZE, {
+      snake: new SnakeGame.Snake(this, 16 * this.BLOCK_SIZE, 10 * this.BLOCK_SIZE, {
         asset: 'head',
-        row: 4,
+        row: 10,
         col: 16,
         body: snakeBody
       })
