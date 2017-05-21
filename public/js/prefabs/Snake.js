@@ -74,9 +74,8 @@ SnakeGame.Snake.prototype.moveForward = function() {
   snakeMovement.start();
 
   if (this.state.board.isOccupied(this.row, this.col)) {
-    SnakeGame.game.state.start('GameState');
-    console.log('new game');
-    return;
+    this.state.gameOver();
+    return true;
   }
 
   this.state.board.redraw(this);

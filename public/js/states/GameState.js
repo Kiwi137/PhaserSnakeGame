@@ -2,10 +2,6 @@ var SnakeGame = SnakeGame || {};
 
 SnakeGame.GameState = {
   init: function() {
-    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    this.scale.pageAlignHorizontally = true;
-    this.scale.pageAlignVertically = true;
-
     this.NUM_ROWS = 17;
     this.NUM_COLS = 32;
     this.BLOCK_SIZE = this.game.world.width / this.NUM_COLS;
@@ -36,16 +32,9 @@ SnakeGame.GameState = {
 
     this.cursors = this.game.input.keyboard.createCursorKeys();
   },
-  //load the game assets before the game starts
-  preload: function() {
-    this.load.image('background', 'assets/images/background.png');
-    this.load.image('head', 'assets/images/head.png');
-    this.load.image('body', 'assets/images/body.png');
-  },
   //executed after everything is loaded
   create: function() {
-    this.background = this.game.add.sprite(0, 0, 'background');
-
+    //this.background = this.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'grass');
     this.board = new SnakeGame.Board(this, this.NUM_ROWS, this.NUM_COLS);
 
     // group for the blocks that make up the body of the snake
@@ -86,7 +75,12 @@ SnakeGame.GameState = {
       this.player.snake.changeDirection(this.SOUTH);
     }
 
-    //this.player.snake.moveForward();
-    this.board.redraw(this.player.snake);
+    var isDead = this.player.snake.moveForward();
+    if (!isDead) {
+      this.board.redraw(this.player.snake);
+    }
+  },
+  gameOver: function() {
+    this.state.start('GameOverState', true, false, 'GAME OVER!');
   }
 };
