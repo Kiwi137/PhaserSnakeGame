@@ -10,6 +10,7 @@ var PreloadState = {
 
     this.load.image('background', 'assets/images/background.png');
     this.load.image('body', 'assets/images/body.png');
+    this.load.image('food', 'assets/images/food.png');
     this.load.spritesheet('head', 'assets/images/head.png', 20, 20, 4); 
   },
   create: function() {

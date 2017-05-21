@@ -37,6 +37,8 @@ SnakeGame.GameState = {
     //this.background = this.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'grass');
     this.board = new SnakeGame.Board(this, this.NUM_ROWS, this.NUM_COLS);
 
+    this.food = this.game.add.sprite(-1000, -1000, 'food');
+
     // group for the blocks that make up the body of the snake
     var snakeBody = this.add.group();
     var i;
@@ -54,12 +56,14 @@ SnakeGame.GameState = {
         row: 10,
         col: 16,
         body: snakeBody
-      })
+      }),
+      score: 0
     };
 
     this.game.add.existing(this.player.snake);
+    this.placeFood();
     this.board.redraw(this.player.snake);
-    this.board.consoleLog();
+    //this.board.consoleLog();
   },
   //this is executed multiple times per second
   update: function() {
@@ -75,10 +79,26 @@ SnakeGame.GameState = {
       this.player.snake.changeDirection(this.SOUTH);
     }
 
-    var isDead = this.player.snake.moveForward();
+    var isDead = this.player.snake.moveForward(this.food);
     if (!isDead) {
       this.board.redraw(this.player.snake);
+    } else {
+      this.gameOver();
     }
+  },
+  placeFood: function() {
+    var foodRow = -1;
+    var foodCol = -1;
+
+    while (this.board.isOccupied(foodRow, foodCol)) {
+      foodRow = Math.floor(Math.random() * this.NUM_ROWS);
+      foodCol = Math.floor(Math.random() * this.NUM_COLS)
+    }
+
+    this.food.x = foodCol * this.BLOCK_SIZE;
+    this.food.y = foodRow * this.BLOCK_SIZE;
+    this.food.row = foodRow;
+    this.food.col = foodCol;
   },
   gameOver: function() {
     this.state.start('GameOverState', true, false, 'GAME OVER!');
