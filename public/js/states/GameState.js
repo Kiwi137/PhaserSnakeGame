@@ -86,6 +86,7 @@ SnakeGame.GameState = {
       this.player.snake.changeDirection(this.SOUTH);
     }
 
+    //this.player.snake.moveForward();
     this.board.redraw(this.player.snake);
   }
 };

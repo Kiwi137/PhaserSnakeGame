@@ -43,15 +43,35 @@ SnakeGame.Snake.prototype.canChangeDirection = function(direction) {
 
 // 
 SnakeGame.Snake.prototype.moveForward = function() {
-  var i;
-  for (i = this.snakeBody.children.length - 1; i > 0; i--) {
-    this.snakeBody.children[i].swap(this.snakeBody.children[i - 1]);
+  if (this.isMoving) {
+    return;
   }
+
+  this.isMoving = true;
+
+  var i, snakeMovement, previousBlock;
+  for (i = this.snakeBody.children.length - 1; i > 0; i--) {
+    previousBlock = this.snakeBody.children[i - 1];
+    snakeMovement = SnakeGame.game.add.tween(this.snakeBody.children[i]);
+    snakeMovement.to({ x: previousBlock.x, y: previousBlock.y }, 500);
+    this.snakeBody.children[i].swap(previousBlock);
+    snakeMovement.start();
+  }
+
+  snakeMovement = SnakeGame.game.add.tween(this.snakeBody.children[0]);
+  snakeMovement.to({ x: this.x, y: this.y }, 500);
   this.snakeBody.children[0].row = this.row;
   this.snakeBody.children[0].col = this.col;
-
+  snakeMovement.start();
+  
   this.row += this.direction.y;
   this.col += this.direction.x;
+  snakeMovement = SnakeGame.game.add.tween(this);
+  snakeMovement.to({ x: this.col * this.state.BLOCK_SIZE, y: this.row * this.state.BLOCK_SIZE }, 500);
+  snakeMovement.onComplete.add(function(){
+    this.isMoving = false;
+  }, this);
+  snakeMovement.start();
 
   if (this.state.board.isOccupied(this.row, this.col)) {
     SnakeGame.game.state.start('GameState');
