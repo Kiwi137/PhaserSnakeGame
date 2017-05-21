@@ -10,6 +10,30 @@ SnakeGame.GameState = {
     this.NUM_COLS = 32;
     this.BLOCK_SIZE = this.game.world.width / this.NUM_COLS;
 
+    this.NORTH = {
+      x: 0,
+      y: -1,
+      symbol: 'n'
+    };
+
+    this.SOUTH = {
+      x: 0,
+      y: 1,
+      symbol: 's'
+    };
+
+    this.EAST = {
+      x: 1,
+      y: 0,
+      symbol: 'e'
+    };
+
+    this.WEST = {
+      x: -1,
+      y: 0,
+      symbol: 'w'
+    };
+
     this.cursors = this.game.input.keyboard.createCursorKeys();
   },
   //load the game assets before the game starts
@@ -44,20 +68,24 @@ SnakeGame.GameState = {
       })
     };
 
-    this.board.addSnakeToBoard(this.player.snake);
-
+    this.game.add.existing(this.player.snake);
+    this.board.redraw(this.player.snake);
     this.board.consoleLog();
   },
   //this is executed multiple times per second
   update: function() {
+    // check to see if any arrow key is pressed and change
+    //   direction if possible
     if(this.cursors.left.isDown) {
-      this.player.snake.changeDirection('w');
+      this.player.snake.changeDirection(this.WEST);
     } else if(this.cursors.right.isDown) {
-      this.player.snake.changeDirection('e');
+      this.player.snake.changeDirection(this.EAST);
     } else if(this.cursors.up.isDown) {
-      this.player.snake.changeDirection('n');
+      this.player.snake.changeDirection(this.NORTH);
     } else if(this.cursors.down.isDown) {
-      this.player.snake.changeDirection('s');
+      this.player.snake.changeDirection(this.SOUTH);
     }
+
+    this.board.redraw(this.player.snake);
   }
 };

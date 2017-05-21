@@ -10,3 +10,12 @@ SnakeGame.SnakeBody = function(state, x, y, data) {
 
 SnakeGame.SnakeBody.prototype = Object.create(Phaser.Sprite.prototype);
 SnakeGame.SnakeBody.prototype.constructor = SnakeGame.SnakeBody;
+
+SnakeGame.SnakeBody.prototype.swap = function(other) {
+  var tempRow = this.row;
+  var tempCol = this.col;
+  this.row = other.row;
+  this.col = other.col;
+  other.row = tempRow;
+  other.col = tempCol;
+}
