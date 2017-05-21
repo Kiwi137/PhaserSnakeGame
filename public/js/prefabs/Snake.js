@@ -3,11 +3,15 @@ var SnakeGame = SnakeGame || {};
 SnakeGame.Snake = function(state, x, y, data) {
   Phaser.Sprite.call(this, state.game, x, y, data.asset, 3);
 
+  this.scale.setTo(state.IMAGE_SCALE, state.IMAGE_SCALE);
+
   this.state = state;
   this.direction = data.direction || this.state.NORTH;
   this.row = data.row;
   this.col = data.col;
   this.snakeBody = data.body;
+
+  this.MOVE_TIME = 100;
 };
 
 SnakeGame.Snake.prototype = Object.create(Phaser.Sprite.prototype);
@@ -68,7 +72,7 @@ SnakeGame.Snake.prototype.moveForward = function(food) {
   for (i = this.snakeBody.children.length - 1; i > 0; i--) {
     previousBlock = this.snakeBody.children[i - 1];
     snakeMovement = SnakeGame.game.add.tween(this.snakeBody.children[i]);
-    snakeMovement.to({ x: previousBlock.x, y: previousBlock.y }, 200);
+    snakeMovement.to({ x: previousBlock.x, y: previousBlock.y }, this.MOVE_TIME);
     this.snakeBody.children[i].swap(previousBlock);
     snakeMovement.start();
   }
@@ -87,7 +91,7 @@ SnakeGame.Snake.prototype.moveForward = function(food) {
   }
 
   snakeMovement = SnakeGame.game.add.tween(this.snakeBody.children[0]);
-  snakeMovement.to({ x: this.x, y: this.y }, 200);
+  snakeMovement.to({ x: this.x, y: this.y }, this.MOVE_TIME);
   this.snakeBody.children[0].row = this.row;
   this.snakeBody.children[0].col = this.col;
   snakeMovement.start();
@@ -95,7 +99,7 @@ SnakeGame.Snake.prototype.moveForward = function(food) {
   this.row += this.direction.y;
   this.col += this.direction.x;
   snakeMovement = SnakeGame.game.add.tween(this);
-  snakeMovement.to({ x: this.col * this.state.BLOCK_SIZE, y: this.row * this.state.BLOCK_SIZE }, 200);
+  snakeMovement.to({ x: this.col * this.state.BLOCK_SIZE, y: this.row * this.state.BLOCK_SIZE }, this.MOVE_TIME);
   snakeMovement.onComplete.add(function(){
     this.isMoving = false;
   }, this);

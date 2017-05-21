@@ -1,4 +1,6 @@
-var BootState = {
+var SnakeGame = SnakeGame || {};
+
+SnakeGame.BootState = {
   //initiate some game-level settings
   init: function() {
     //scaling options

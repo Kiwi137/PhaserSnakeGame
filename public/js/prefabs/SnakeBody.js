@@ -3,6 +3,8 @@ var SnakeGame = SnakeGame || {};
 SnakeGame.SnakeBody = function(state, x, y, data) {
   Phaser.Sprite.call(this, state.game, x, y, data.asset);
 
+  this.scale.setTo(state.IMAGE_SCALE, state.IMAGE_SCALE);
+
   this.game = state.game;
   this.row = data.row;
   this.col = data.col;

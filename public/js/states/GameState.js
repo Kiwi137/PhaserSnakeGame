@@ -2,9 +2,10 @@ var SnakeGame = SnakeGame || {};
 
 SnakeGame.GameState = {
   init: function() {
-    this.NUM_ROWS = 17;
-    this.NUM_COLS = 32;
+    this.NUM_ROWS = 30;
+    this.NUM_COLS = 48;
     this.BLOCK_SIZE = this.game.world.width / this.NUM_COLS;
+    this.IMAGE_SCALE = this.BLOCK_SIZE / 20;
 
     this.NORTH = {
       x: 0,
@@ -34,33 +35,12 @@ SnakeGame.GameState = {
   },
   //executed after everything is loaded
   create: function() {
-    //this.background = this.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'grass');
+    this.background = this.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'tile');
     this.board = new SnakeGame.Board(this, this.NUM_ROWS, this.NUM_COLS);
-
     this.food = this.game.add.sprite(-1000, -1000, 'food');
+    this.food.scale.setTo(this.IMAGE_SCALE, this.IMAGE_SCALE);
 
-    // group for the blocks that make up the body of the snake
-    var snakeBody = this.add.group();
-    var i;
-    for (i = 11; i < 16; i++) {
-      snakeBody.add(new SnakeGame.SnakeBody(this, 16 * this.BLOCK_SIZE, i * this.BLOCK_SIZE, {
-        asset: 'body',
-        row: i,
-        col: 16
-      }));
-    }
-
-    this.player = {
-      snake: new SnakeGame.Snake(this, 16 * this.BLOCK_SIZE, 10 * this.BLOCK_SIZE, {
-        asset: 'head',
-        row: 10,
-        col: 16,
-        body: snakeBody
-      }),
-      score: 0
-    };
-
-    this.game.add.existing(this.player.snake);
+    this.initPlayer();
     this.placeFood();
     this.board.redraw(this.player.snake);
     //this.board.consoleLog();
@@ -86,6 +66,30 @@ SnakeGame.GameState = {
       this.gameOver();
     }
   },
+  initPlayer: function() {
+    // group for the blocks that make up the body of the snake
+    var snakeBody = this.add.group();
+    var i;
+    for (i = 20; i < 26; i++) {
+      snakeBody.add(new SnakeGame.SnakeBody(this, 32 * this.BLOCK_SIZE, i * this.BLOCK_SIZE, {
+        asset: 'body',
+        row: i,
+        col: 32
+      }));
+    }
+
+    this.player = {
+      snake: new SnakeGame.Snake(this, 32 * this.BLOCK_SIZE, 19 * this.BLOCK_SIZE, {
+        asset: 'head',
+        row: 19,
+        col: 32,
+        body: snakeBody
+      }),
+      score: -100
+    };
+
+    this.game.add.existing(this.player.snake);
+  },
   placeFood: function() {
     var foodRow = -1;
     var foodCol = -1;
@@ -99,8 +103,10 @@ SnakeGame.GameState = {
     this.food.y = foodRow * this.BLOCK_SIZE;
     this.food.row = foodRow;
     this.food.col = foodCol;
+
+    this.player.score += 100;
   },
   gameOver: function() {
-    this.state.start('GameOverState', true, false, 'GAME OVER!');
+    this.state.start('HomeState', true, false, this.player.score);
   }
 };
